@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{6} - %msg%n"/>
+        </Console>
+        <RollingFile name="RollingFile" fileName="logs/log.log"
+                     filePattern="logs/log-%d{yyyy-MM-dd HH:mm}-%i.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t]  %-5level %logger{6} in %M- %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 KB"/>
+                <TimeBasedTriggeringPolicy interval="60" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
