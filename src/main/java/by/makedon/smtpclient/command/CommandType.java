@@ -1,14 +1,15 @@
 package by.makedon.smtpclient.command;
 
 public enum CommandType {
+    EHLO("EHLO %s"),
     HELO("HELO %s"),
-    MAIL("MAIL FROM:%s"),
-    RCPT("RCPT TO:%s"),
+    MAIL("MAIL FROM:<%s>"),
+    RCPT("RCPT TO:<%s>"),
     DATA("DATA"),
     RSET("RSET"),
-    SEND("SEND FROM:%s"),
-    SOML("SOML FROM:%s"),
-    SAML("SAML FROM:%s"),
+    SEND("SEND FROM:<%s>"),
+    SOML("SOML FROM:<%s>"),
+    SAML("SAML FROM:<%s>"),
     VRFY("VRFY %s"),
     EXPN("EXPN %s"),
     HELP("HELP %s"),

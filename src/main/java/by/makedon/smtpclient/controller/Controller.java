@@ -1,10 +1,15 @@
 package by.makedon.smtpclient.controller;
 
+import by.makedon.smtpclient.criteria.MailFormCriteria;
+import by.makedon.smtpclient.exception.InvalidParameterException;
+import by.makedon.smtpclient.exception.MailSocketException;
+import by.makedon.smtpclient.socket.MailSocket;
+import by.makedon.smtpclient.validator.Validator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
+import java.util.Map;
 
 public final class Controller {
     private static final Logger LOGGER = LogManager.getLogger(Controller.class);
@@ -28,8 +33,35 @@ public final class Controller {
         return INSTANCE;
     }
 
-    public void processRequest(String commandName, List<String> parameters) {
+    public void sendMessage(Map<MailFormCriteria, String> parameters) throws InvalidParameterException, MailSocketException {
+        String smtpServerValue = parameters.get(MailFormCriteria.SMTP_SERVER);
+        String fromValue = parameters.get(MailFormCriteria.FROM);
+        String toValue = parameters.get(MailFormCriteria.TO);
+        String subjectValue = parameters.get(MailFormCriteria.SUBJECT);
+        String mailTextValue = parameters.get(MailFormCriteria.MAIL_TEXT);
 
+        if (!Validator.validateOnNullEmpty(smtpServerValue, fromValue, toValue, subjectValue, mailTextValue)) {
+            throw new InvalidParameterException("parameters are empty or null");
+        }
+
+        if (!Validator.validateEmail(fromValue)) {
+            throw new InvalidParameterException("invalid from email");
+        }
+
+        if (!Validator.validateTo(toValue)) {
+            throw new InvalidParameterException("invalid to emails");
+        }
+
+        if (!Validator.validateMailText(mailTextValue)) {
+            throw new InvalidParameterException("Dot '.' can't be the one symbol in sentence");
+        }
+
+        MailSocket mailSocket = new MailSocket();
+        try {
+
+        } finally {
+            mailSocket.close();
+        }
     }
 
     @Override
