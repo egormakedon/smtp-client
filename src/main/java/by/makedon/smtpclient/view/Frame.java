@@ -2,7 +2,7 @@ package by.makedon.smtpclient.view;
 
 import by.makedon.smtpclient.model.MemoBuffer;
 import by.makedon.smtpclient.controller.Controller;
-import by.makedon.smtpclient.criteria.MailFormCriteria;
+import by.makedon.smtpclient.model.ParameterCriteria;
 import by.makedon.smtpclient.exception.InvalidParameterException;
 import by.makedon.smtpclient.exception.MailSocketException;
 import org.apache.logging.log4j.Level;
@@ -90,12 +90,12 @@ public class Frame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Map<MailFormCriteria, String> parameters = new HashMap<MailFormCriteria, String>();
-                parameters.put(MailFormCriteria.SMTP_SERVER, smtpServerField.getText());
-                parameters.put(MailFormCriteria.FROM, fromField.getText());
-                parameters.put(MailFormCriteria.TO, toField.getText());
-                parameters.put(MailFormCriteria.SUBJECT, subjectField.getText());
-                parameters.put(MailFormCriteria.MAIL_TEXT, messageArea.getText());
+                Map<ParameterCriteria, String> parameters = new HashMap<ParameterCriteria, String>();
+                parameters.put(ParameterCriteria.SMTP_SERVER, smtpServerField.getText());
+                parameters.put(ParameterCriteria.FROM, fromField.getText());
+                parameters.put(ParameterCriteria.TO, toField.getText());
+                parameters.put(ParameterCriteria.SUBJECT, subjectField.getText());
+                parameters.put(ParameterCriteria.MAIL_TEXT, messageArea.getText());
 
                 try {
                     Controller.getInstance().sendMessage(parameters);

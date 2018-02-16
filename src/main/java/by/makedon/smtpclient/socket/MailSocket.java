@@ -32,8 +32,8 @@ public class MailSocket {
             output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 
             MemoBuffer memoBuffer = MemoBuffer.getInstance();
-            memoBuffer.append("C: client " + InetAddress.getLocalHost().getHostAddress() + " connected\n");
-            memoBuffer.append("S: " + input.nextLine() + "\n");
+//            memoBuffer.append("C: client " + InetAddress.getLocalHost().getHostAddress() + " connected\n");
+//            memoBuffer.append("S: " + input.nextLine() + "\n");
         } catch (UnknownHostException e) {
             throw new MailSocketException("invalid host", e);
         } catch (IOException e) {
