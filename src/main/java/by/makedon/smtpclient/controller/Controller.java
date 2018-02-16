@@ -1,6 +1,6 @@
 package by.makedon.smtpclient.controller;
 
-import by.makedon.smtpclient.buffer.MemoBuffer;
+import by.makedon.smtpclient.model.MemoBuffer;
 import by.makedon.smtpclient.command.CommandType;
 import by.makedon.smtpclient.criteria.MailFormCriteria;
 import by.makedon.smtpclient.exception.InvalidParameterException;
@@ -11,11 +11,11 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.Map;
+import java.util.Scanner;
 
 public final class Controller {
     private static final Logger LOGGER = LogManager.getLogger(Controller.class);
@@ -66,58 +66,58 @@ public final class Controller {
         MemoBuffer memoBuffer = MemoBuffer.getInstance();
         try {
             mailSocket.create(smtpServerValue);
-            DataInputStream dataInputStream = mailSocket.getDataInputStream();
-            DataOutputStream dataOutputStream = mailSocket.getDataOutputStream();
+            Scanner input = mailSocket.getInput();
+            PrintWriter output = mailSocket.getOutput();
 
-            String heloCommand = CommandType.HELO.getCommand();
+            String heloCommand = CommandType.EHLO.getCommand();
             String helo = String.format(heloCommand, InetAddress.getLocalHost().getHostAddress());
             memoBuffer.append("C: " + helo + "\n");
-            dataOutputStream.writeUTF(helo);
-            dataOutputStream.flush();
-            memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
+            output.write(helo);
+            output.flush();
+            memoBuffer.append("S: " + input.nextLine() + "\n");
 
             String mailCommand = CommandType.MAIL.getCommand();
             String mail = String.format(mailCommand, fromValue);
             memoBuffer.append("C: " + mail + "\n");
-            dataOutputStream.writeUTF(mail);
-            dataOutputStream.flush();
-            memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
+            output.write(mail);
+            output.flush();
+            memoBuffer.append("S: " + input.nextLine() + "\n");
 
             String rcptCommand = CommandType.RCPT.getCommand();
             for (String s : toValue.split(",")) {
                 String rcpt = String.format(rcptCommand, s);
                 memoBuffer.append("C: " + rcpt + "\n");
-                dataOutputStream.writeUTF(rcpt);
-                dataOutputStream.flush();
-                memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
+                output.write(rcpt);
+                output.flush();
+                memoBuffer.append("S: " + input.nextLine() + "\n");
             }
 
             String dataCommand = CommandType.DATA.getCommand();
             memoBuffer.append("C: " + dataCommand + "\n");
-            dataOutputStream.writeUTF(dataCommand);
-            dataOutputStream.flush();
-            memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
+            output.write(dataCommand);
+            output.flush();
+            memoBuffer.append("S: " + input.nextLine() + "\n");
 
             memoBuffer.append("C: Subject: " + subjectValue + "\n");
-            dataOutputStream.writeUTF("Subject: " + subjectValue);
-            dataOutputStream.flush();
-            memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
+            output.write("Subject: " + subjectValue);
+            output.flush();
+            memoBuffer.append("S: " + input.nextLine() + "\n");
 
             for (String s : mailTextValue.split("\n")) {
                 memoBuffer.append("C: " + s + "\n");
-                dataOutputStream.writeUTF(s);
-                dataOutputStream.flush();
+                output.write(s);
+                output.flush();
             }
             memoBuffer.append("C: .\n");
-            dataOutputStream.writeUTF(".");
-            dataOutputStream.flush();
-            memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
+            output.write(".");
+            output.flush();
+            memoBuffer.append("S: " + input.nextLine() + "\n");
 
             String quitCommand = CommandType.QUIT.getCommand();
             memoBuffer.append("C: " + quitCommand + "\n");
-            dataOutputStream.writeUTF(quitCommand);
-            dataOutputStream.flush();
-            memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
+            output.write(quitCommand);
+            output.flush();
+            memoBuffer.append("S: " + input.nextLine() + "\n");
         } catch (IOException e) {
             throw new MailSocketException(e);
         } finally {

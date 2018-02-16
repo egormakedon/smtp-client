@@ -1,4 +1,4 @@
-package by.makedon.smtpclient.buffer;
+package by.makedon.smtpclient.model;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -6,16 +6,14 @@ import org.apache.logging.log4j.Logger;
 
 public final class MemoBuffer {
     private static final Logger LOGGER = LogManager.getLogger(MemoBuffer.class);
-
     private static boolean instanceCreated;
     private static final MemoBuffer INSTANCE;
-
-    private StringBuilder memoBuffer = new StringBuilder();
-
     static {
         INSTANCE = new MemoBuffer();
         instanceCreated = true;
     }
+
+    private StringBuilder buffer = new StringBuilder();
 
     private MemoBuffer() {
         if (instanceCreated) {
@@ -28,13 +26,21 @@ public final class MemoBuffer {
         return INSTANCE;
     }
 
-    public void append(String s) {
-        memoBuffer.append(s);
+    public void appendClient(String s) {
+        buffer.append("C: ");
+        buffer.append(s);
+        buffer.append("\n");
+    }
+
+    public void appendServer(String s) {
+        buffer.append("S: ");
+        buffer.append(s);
+        buffer.append("\n");
     }
 
     @Override
     public String toString() {
-        return memoBuffer.toString();
+        return buffer.toString();
     }
 
     @Override

@@ -1,11 +1,11 @@
 package by.makedon.smtpclient.command;
 
 public enum CommandType {
-    EHLO("EHLO %s"),
-    HELO("HELO %s"),
-    MAIL("MAIL FROM:<%s>"),
-    RCPT("RCPT TO:<%s>"),
-    DATA("DATA"),
+    EHLO("EHLO %s\r"),
+    HELO("HELO %s\r"),
+    MAIL("MAIL FROM:<%s>\r"),
+    RCPT("RCPT TO:<%s>\r"),
+    DATA("DATA\r"),
     RSET("RSET"),
     SEND("SEND FROM:<%s>"),
     SOML("SOML FROM:<%s>"),
@@ -14,7 +14,7 @@ public enum CommandType {
     EXPN("EXPN %s"),
     HELP("HELP %s"),
     NOOP("NOOP"),
-    QUIT("QUIT"),
+    QUIT("QUIT\r"),
     TURN("TURN");
 
     private String command;

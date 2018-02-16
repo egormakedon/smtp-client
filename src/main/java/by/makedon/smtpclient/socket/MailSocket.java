@@ -1,6 +1,6 @@
 package by.makedon.smtpclient.socket;
 
-import by.makedon.smtpclient.buffer.MemoBuffer;
+import by.makedon.smtpclient.model.MemoBuffer;
 import by.makedon.smtpclient.exception.MailSocketException;
 
 import java.io.IOException;

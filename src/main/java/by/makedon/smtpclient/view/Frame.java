@@ -1,6 +1,6 @@
 package by.makedon.smtpclient.view;
 
-import by.makedon.smtpclient.buffer.MemoBuffer;
+import by.makedon.smtpclient.model.MemoBuffer;
 import by.makedon.smtpclient.controller.Controller;
 import by.makedon.smtpclient.criteria.MailFormCriteria;
 import by.makedon.smtpclient.exception.InvalidParameterException;
