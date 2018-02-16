@@ -92,6 +92,22 @@ public final class Controller {
                 memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
             }
 
+            String dataCommand = CommandType.DATA.getCommand();
+            memoBuffer.append("C: " + dataCommand + "\n");
+            dataOutputStream.writeUTF(dataCommand);
+            dataOutputStream.flush();
+            memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
+
+            memoBuffer.append("C: Subject: " + subjectValue + "\n");
+            dataOutputStream.writeUTF("Subject: " + subjectValue);
+            dataOutputStream.flush();
+            memoBuffer.append("S: " + dataInputStream.readUTF() + "\n");
+
+            for (String s : mailTextValue.split("\n")) {
+                memoBuffer.append("C: " + s + "\n");
+                dataOutputStream.writeUTF(s);
+                dataOutputStream.flush();
+            }
             memoBuffer.append("C: .\n");
             dataOutputStream.writeUTF(".");
             dataOutputStream.flush();
