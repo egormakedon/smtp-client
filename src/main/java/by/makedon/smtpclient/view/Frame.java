@@ -35,7 +35,7 @@ public class Frame {
 
         setFieldsPanel();
         setMessagePanel();
-        setSendButton();
+        setButtons();
         setMemoPanel();
     }
 
@@ -83,11 +83,11 @@ public class Frame {
         frame.add(new JScrollPane((new JPanel()).add(messageArea)));
     }
 
-    private void setSendButton() {
-        JButton button = new JButton();
-        button.setText("send message");
+    private void setButtons() {
+        JButton sendButton = new JButton();
+        sendButton.setText("send_message");
 
-        button.addActionListener(new ActionListener() {
+        sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Map<ParameterCriteria, String> parameters = new HashMap<ParameterCriteria, String>();
@@ -98,7 +98,7 @@ public class Frame {
                 parameters.put(ParameterCriteria.MAIL_TEXT, messageArea.getText());
 
                 try {
-                    Controller.getInstance().sendMessage(parameters);
+                    Controller.getInstance().processRequest(sendButton.getText(), parameters);
                     updateMemo();
                 } catch (InvalidParameterException | MailSocketException exc) {
                     LOGGER.log(Level.ERROR, exc);
@@ -107,13 +107,28 @@ public class Frame {
             }
         });
 
+        JButton allCommandsButton = new JButton();
+        allCommandsButton.setText("all commands");
+
+        allCommandsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CommandsDialog commandsDialog = new CommandsDialog(memoArea);
+                commandsDialog.show();
+            }
+        });
+
         JPanel panel = new JPanel();
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(0, 50, 0, 50);
         panel.setLayout(new GridBagLayout());
-        panel.add(button);
+        panel.add(sendButton, c);
+        panel.add(allCommandsButton, c);
         frame.add(panel);
     }
 
     private void setMemoPanel() {
+        memoArea.setBackground(Color.BLACK);
         memoArea.setEnabled(false);
         frame.add(new JScrollPane((new JPanel()).add(memoArea)));
     }
