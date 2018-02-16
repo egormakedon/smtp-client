@@ -1,29 +1,39 @@
 package by.makedon.smtpclient.socket;
 
+import by.makedon.smtpclient.buffer.MemoBuffer;
 import by.makedon.smtpclient.exception.MailSocketException;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 public class MailSocket {
     private static final int PORT = 25;
     private Socket socket;
-    private DataInputStream dataInputStream;
-    private DataOutputStream dataOutputStream;
+    private Scanner input;
+    private PrintWriter output;
 
     public void create(String address) throws MailSocketException {
         try {
             InetAddress inetAddress = InetAddress.getByName(address);
-            if (!inetAddress.isReachable(2)) {
+
+            if (!inetAddress.isReachable(5000)) {
                 throw new MailSocketException("invalid host");
             }
+
             socket = new Socket(inetAddress, PORT);
-            dataInputStream = new DataInputStream(socket.getInputStream());
-            dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            input = new Scanner(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+            MemoBuffer memoBuffer = MemoBuffer.getInstance();
+            memoBuffer.append("C: client " + InetAddress.getLocalHost().getHostAddress() + " connected\n");
+            memoBuffer.append("S: " + input.nextLine() + "\n");
         } catch (UnknownHostException e) {
             throw new MailSocketException("invalid host", e);
         } catch (IOException e) {
@@ -32,20 +42,12 @@ public class MailSocket {
     }
 
     public void close() throws MailSocketException {
-        if (dataInputStream != null) {
-            try {
-                dataInputStream.close();
-            } catch (IOException e) {
-                throw new MailSocketException(e);
-            }
+        if (input != null) {
+            input.close();
         }
 
-        if (dataOutputStream != null) {
-            try {
-                dataOutputStream.close();
-            } catch (IOException e) {
-                throw new MailSocketException(e);
-            }
+        if (output != null) {
+            output.close();
         }
 
         if (socket != null) {
@@ -57,17 +59,17 @@ public class MailSocket {
         }
     }
 
-    public DataInputStream getDataInputStream() throws MailSocketException {
+    public Scanner getInput() throws MailSocketException {
         if (socket == null || socket.isClosed()) {
             throw new MailSocketException("socket closed");
         }
-        return dataInputStream;
+        return input;
     }
 
-    public DataOutputStream getDataOutputStream() throws MailSocketException {
+    public PrintWriter getOutput() throws MailSocketException {
         if (socket == null || socket.isClosed()) {
             throw new MailSocketException("socket closed");
         }
-        return dataOutputStream;
+        return output;
     }
 }
