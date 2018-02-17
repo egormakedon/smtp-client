@@ -1,10 +1,12 @@
 package by.makedon.smtpclient.view;
 
+import by.makedon.smtpclient.exception.CommandException;
 import by.makedon.smtpclient.model.MemoBuffer;
 import by.makedon.smtpclient.controller.Controller;
 import by.makedon.smtpclient.model.ParameterCriteria;
 import by.makedon.smtpclient.exception.InvalidParameterException;
 import by.makedon.smtpclient.exception.MailSocketException;
+import by.makedon.smtpclient.socket.MailSocket;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -100,7 +102,7 @@ public class Frame {
                 try {
                     Controller.getInstance().processRequest(sendButton.getText(), parameters);
                     updateMemo();
-                } catch (InvalidParameterException | MailSocketException exc) {
+                } catch (InvalidParameterException | CommandException exc) {
                     LOGGER.log(Level.ERROR, exc);
                     JOptionPane.showMessageDialog(frame, exc.getMessage());
                 }

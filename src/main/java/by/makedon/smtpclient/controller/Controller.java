@@ -2,6 +2,7 @@ package by.makedon.smtpclient.controller;
 
 import by.makedon.smtpclient.command.Command;
 import by.makedon.smtpclient.command.factory.CommandFactory;
+import by.makedon.smtpclient.exception.CommandException;
 import by.makedon.smtpclient.model.ParameterCriteria;
 import by.makedon.smtpclient.exception.InvalidParameterException;
 import by.makedon.smtpclient.exception.MailSocketException;
@@ -32,7 +33,7 @@ public final class Controller {
         return INSTANCE;
     }
 
-    public void processRequest(String commandName, Map<ParameterCriteria, String> parameters) throws InvalidParameterException, MailSocketException {
+    public void processRequest(String commandName, Map<ParameterCriteria, String> parameters) throws InvalidParameterException, CommandException {
         Optional<Command> optionalCommand = CommandFactory.defineCommand(commandName);
         if (!optionalCommand.isPresent()) {
             throw new InvalidParameterException(commandName + " - invalid command");

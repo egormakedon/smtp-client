@@ -29,7 +29,6 @@ public final class MemoBuffer {
     public void appendClient(String s) {
         buffer.append("C: ");
         buffer.append(s);
-        buffer.append("\n");
     }
 
     public void appendServer(String s) {
