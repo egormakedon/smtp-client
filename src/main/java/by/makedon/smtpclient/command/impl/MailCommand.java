@@ -3,14 +3,11 @@ package by.makedon.smtpclient.command.impl;
 import by.makedon.smtpclient.command.Command;
 import by.makedon.smtpclient.exception.CommandException;
 import by.makedon.smtpclient.exception.InvalidParameterException;
-import by.makedon.smtpclient.model.MemoBuffer;
 import by.makedon.smtpclient.model.ParameterCriteria;
 import by.makedon.smtpclient.model.Validator;
 import by.makedon.smtpclient.socket.MailSocket;
 
-import java.io.PrintWriter;
 import java.util.Map;
-import java.util.Scanner;
 
 public class MailCommand implements Command {
     private static final String MAIL = "MAIL FROM:<%s>\r\n";
@@ -36,14 +33,7 @@ public class MailCommand implements Command {
 
         MailSocket mailSocket = MailSocket.getInstance();
         try {
-            Scanner input = mailSocket.getInput();
-            PrintWriter output = mailSocket.getOutput();
-            MemoBuffer memoBuffer = MemoBuffer.getInstance();
-
-            memoBuffer.appendClient(mail);
-            output.write(mail);
-            output.flush();
-            memoBuffer.appendServer(input.nextLine());
+            executeCommand(mail);
         } catch (Exception e) {
             mailSocket.close();
             throw new CommandException(e);
