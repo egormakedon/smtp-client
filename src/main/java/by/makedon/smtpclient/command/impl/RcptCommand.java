@@ -19,14 +19,14 @@ public class RcptCommand implements Command {
 
         String rcpt;
         if (toValue != null) {
-            if (!Validator.validateToEmail(toValue)) {
-                throw new InvalidParameterException("invalid to email");
+            if (!Validator.validateEmail(toValue)) {
+                throw new InvalidParameterException("invalid email");
             }
             rcpt = String.format(RCPT, toValue);
 
         } else {
-            if (!Validator.validateToEmail(argumentValue)) {
-                throw new InvalidParameterException("invalid to email");
+            if (!Validator.validateEmail(argumentValue)) {
+                throw new InvalidParameterException("invalid email");
             }
             rcpt = String.format(RCPT, argumentValue);
         }
