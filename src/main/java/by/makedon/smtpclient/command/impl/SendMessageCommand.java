@@ -4,6 +4,7 @@ import by.makedon.smtpclient.command.Command;
 import by.makedon.smtpclient.exception.CommandException;
 import by.makedon.smtpclient.exception.InvalidParameterException;
 import by.makedon.smtpclient.model.MemoBuffer;
+import by.makedon.smtpclient.model.MessageId;
 import by.makedon.smtpclient.model.ParameterCriteria;
 import by.makedon.smtpclient.model.Validator;
 import by.makedon.smtpclient.socket.MailSocket;
@@ -47,6 +48,15 @@ public class SendMessageCommand implements Command {
 
             memoBuffer.appendClient("Subject: " + subjectValue + "\n");
             output.write("Subject: " + subjectValue + "\r\n");
+            output.flush();
+
+            long messageId = MessageId.getMessageId();
+            memoBuffer.appendClient("Message-ID: " + messageId + "\n");
+            output.write("Message-ID: " + messageId + "\r\n");
+            output.flush();
+
+            memoBuffer.appendClient("\n");
+            output.write("\r\n");
             output.flush();
 
             for (String sentence : mailTextValue.split("\n")) {
