@@ -20,6 +20,7 @@ public enum CommandType {
     QUIT(new QuitCommand()),
     TURN(new TurnCommand()),
 
+    AUTH(new AuthCommand()),
     CONNECT(new ConnectCommand()),
     SUBMIT(new SubmitCommand()),
     SEND_MESSAGE(new SendMessageCommand());

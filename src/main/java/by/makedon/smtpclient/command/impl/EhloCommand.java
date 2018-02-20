@@ -3,9 +3,7 @@ package by.makedon.smtpclient.command.impl;
 import by.makedon.smtpclient.command.Command;
 import by.makedon.smtpclient.exception.CommandException;
 import by.makedon.smtpclient.exception.InvalidParameterException;
-import by.makedon.smtpclient.exception.SmtpSocketException;
 import by.makedon.smtpclient.model.ParameterCriteria;
-import by.makedon.smtpclient.socket.MailSocket;
 
 import java.net.InetAddress;
 import java.util.Map;

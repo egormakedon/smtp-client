@@ -6,14 +6,12 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import java.io.*;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 import java.util.Scanner;
 
 public final class MailSocket {
@@ -25,10 +23,12 @@ public final class MailSocket {
         instanceCreated = true;
     }
 
-    private static final int PORT = 25;
+    private static final String SMTP_PROPERTIES_PATH = File.separator + "property" + File.separator + "smtp.properties";
+    private static final String HOST = "smtp.host";
+    private static final String PORT = "smtp.port";
     private static boolean socketCreated;
 
-    private Socket socket;
+    private SSLSocket socket;
     private Scanner input;
     private PrintWriter output;
 
@@ -42,24 +42,39 @@ public final class MailSocket {
         return INSTANCE;
     }
 
-    public void create(String address) throws SmtpSocketException {
+    public void create() throws SmtpSocketException {
         if (socketCreated) {
-            return;
+            throw new SmtpSocketException("Socket has already connected");
+        }
+
+        URL url = this.getClass().getResource(SMTP_PROPERTIES_PATH);
+        if (url == null) {
+            LOGGER.log(Level.FATAL, "smtp property file hasn't found");
+            throw new RuntimeException("smtp property file hasn't found");
+        }
+
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileInputStream(new File(url.toURI())));
+        } catch (URISyntaxException e) {
+            LOGGER.log(Level.FATAL, e);
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            LOGGER.log(Level.FATAL, e);
+            throw new RuntimeException(e);
         }
 
         try {
-            InetAddress inetAddress = InetAddress.getByName(address);
+            String host = properties.getProperty(HOST);
+            int port = Integer.parseInt(properties.getProperty(PORT));
 
-            if (!inetAddress.isReachable(1500)) {
-                throw new SmtpSocketException(address + " - invalid host");
-            }
-
-            socket = new Socket(inetAddress, PORT);
+            SSLSocketFactory ssf = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            socket = (SSLSocket) ssf.createSocket(host, port);
             input = new Scanner(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 
             MemoBuffer memoBuffer = MemoBuffer.getInstance();
-            memoBuffer.appendClient("connected to " + address + "\n");
+            memoBuffer.appendClient("connected to " + host + "\n");
             memoBuffer.appendServer(input);
 
             socketCreated = true;
@@ -88,19 +103,12 @@ public final class MailSocket {
         if (socket != null) {
             try {
                 socket.close();
+                socket = null;
             } catch (IOException e) {
                 LOGGER.log(Level.FATAL, e);
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    public void setInput(Scanner input) {
-        this.input = input;
-    }
-
-    public void setOutput(PrintWriter output) {
-        this.output = output;
     }
 
     public Scanner getInput() throws SmtpSocketException {
@@ -115,9 +123,5 @@ public final class MailSocket {
             throw new SmtpSocketException("socket closed");
         }
         return output;
-    }
-
-    boolean isSocketCreated() {
-        return socketCreated;
     }
 }

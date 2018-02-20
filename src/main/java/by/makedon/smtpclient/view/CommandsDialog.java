@@ -64,10 +64,17 @@ class CommandsDialog {
 
         JButton connectButton = new JButton();
         connectButton.setText("connect");
+        addListenerToButton(connectButton);
         panel.add(connectButton);
+
+        JButton authButton = new JButton();
+        authButton.setText("auth");
+        addListenerToButton(authButton);
+        panel.add(authButton);
 
         JButton submitButton = new JButton();
         submitButton.setText("submit");
+        addListenerToButton(submitButton);
         panel.add(submitButton);
 
         dialog.add(panel);
