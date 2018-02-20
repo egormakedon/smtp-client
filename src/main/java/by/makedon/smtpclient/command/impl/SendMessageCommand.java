@@ -25,7 +25,7 @@ import java.util.*;
 public class SendMessageCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(SendMessageCommand.class);
 
-    private static final String MAIL_PROPERTIES_PATH = File.separator + "mail.properties" + File.separator;
+    private static final String MAIL_PROPERTIES_PATH = File.separator + "property" + File.separator + "mail.properties";
     private static final String LOGIN = "mail.login";
     private static final String PASSWORD = "mail.password";
 
@@ -46,6 +46,9 @@ public class SendMessageCommand implements Command {
             Map<ParameterCriteria, String> parameter;
 
             socket = connect();
+
+            MailSocket.getInstance().setInput(socket.getInput());
+            MailSocket.getInstance().setOutput(socket.getOutput());
 
             (new EhloCommand()).execute(null);
 

@@ -95,6 +95,14 @@ public final class MailSocket {
         }
     }
 
+    public void setInput(Scanner input) {
+        this.input = input;
+    }
+
+    public void setOutput(PrintWriter output) {
+        this.output = output;
+    }
+
     public Scanner getInput() throws SmtpSocketException {
         if (input == null) {
             throw new SmtpSocketException("socket closed");
