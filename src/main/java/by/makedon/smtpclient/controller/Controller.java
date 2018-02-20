@@ -27,7 +27,6 @@ public final class Controller {
             throw new RuntimeException("try to clone singleton object");
         }
     }
-
     public static Controller getInstance() {
         return INSTANCE;
     }

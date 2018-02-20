@@ -15,21 +15,10 @@ public class HeloCommand implements Command {
 
     @Override
     public void execute(Map<ParameterCriteria, String> parameters) throws InvalidParameterException, CommandException {
-        String argumentValue = parameters.get(ParameterCriteria.ARGUMENT);
-
-        MailSocket mailSocket = MailSocket.getInstance();
-        try {
-            mailSocket.create(argumentValue);
-        } catch (SmtpSocketException e) {
-            mailSocket.close();
-            throw new CommandException(e);
-        }
-
         try {
             String helo = String.format(HELO, InetAddress.getLocalHost().getHostName());
             executeCommand(helo);
         } catch (Exception e) {
-            mailSocket.close();
             throw new CommandException(e);
         }
     }

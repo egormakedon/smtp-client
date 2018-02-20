@@ -21,6 +21,6 @@ public interface Command {
         memoBuffer.appendClient(command);
         output.write(command);
         output.flush();
-        memoBuffer.appendServer(input.nextLine());
+        memoBuffer.appendServer(input);
     }
 }

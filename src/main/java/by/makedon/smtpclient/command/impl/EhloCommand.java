@@ -15,26 +15,10 @@ public class EhloCommand implements Command {
 
     @Override
     public void execute(Map<ParameterCriteria, String> parameters) throws InvalidParameterException, CommandException {
-        String smptServerValue = parameters.get(ParameterCriteria.SMTP_SERVER);
-        String argumentValue = parameters.get(ParameterCriteria.ARGUMENT);
-
-        MailSocket mailSocket = MailSocket.getInstance();
-        try {
-            if (smptServerValue != null) {
-                mailSocket.create(smptServerValue);
-            } else {
-                mailSocket.create(argumentValue);
-            }
-        } catch (SmtpSocketException e) {
-            mailSocket.close();
-            throw new CommandException(e);
-        }
-
         try {
             String ehlo = String.format(EHLO, InetAddress.getLocalHost().getHostName());
             executeCommand(ehlo);
         } catch (Exception e) {
-            mailSocket.close();
             throw new CommandException(e);
         }
     }

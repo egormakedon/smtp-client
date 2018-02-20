@@ -38,7 +38,7 @@ public final class MemoBuffer {
         @Override
         public void run() {
             try {
-                while (true) {
+                while (input.hasNext()) {
                     String s = input.nextLine();
                     buffer.append("S: ");
                     buffer.append(s);
@@ -54,8 +54,6 @@ public final class MemoBuffer {
         buffer.append("C: ");
         buffer.append(s);
     }
-
-    public void appendServer(String s){}
 
     public void appendServer(Scanner input) {
         AppendServerThread thread = new AppendServerThread(input);

@@ -14,22 +14,13 @@ public class MailCommand implements Command {
 
     @Override
     public void execute(Map<ParameterCriteria, String> parameters) throws InvalidParameterException, CommandException {
-        String fromValue = parameters.get(ParameterCriteria.FROM);
         String argumentValue = parameters.get(ParameterCriteria.ARGUMENT);
 
-        String mail;
-        if (fromValue != null) {
-            if (!Validator.validateEmail(fromValue)) {
-                throw new InvalidParameterException("invalid from email");
-            }
-            mail = String.format(MAIL, fromValue);
-
-        } else {
-            if (!Validator.validateEmail(argumentValue)) {
-                throw new InvalidParameterException("invalid from email");
-            }
-            mail = String.format(MAIL, argumentValue);
+        if (!Validator.validateEmail(argumentValue)) {
+            throw new InvalidParameterException("invalid from email");
         }
+
+        String mail = String.format(MAIL, argumentValue);
 
         MailSocket mailSocket = MailSocket.getInstance();
         try {
