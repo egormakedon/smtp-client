@@ -38,7 +38,7 @@ public final class MemoBuffer {
         @Override
         public void run() {
             try {
-                while (input.hasNext()) {
+                while (true) {
                     String s = input.nextLine();
                     buffer.append("S: ");
                     buffer.append(s);
@@ -59,7 +59,7 @@ public final class MemoBuffer {
         AppendServerThread thread = new AppendServerThread(input);
         thread.start();
         try {
-            TimeUnit.MILLISECONDS.sleep(300);
+            TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             LOGGER.log(Level.WARN, e);
         } finally {

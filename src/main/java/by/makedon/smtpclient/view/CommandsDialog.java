@@ -62,6 +62,14 @@ class CommandsDialog {
         argumentField.setToolTipText("argument");
         panel.add(argumentField);
 
+        JButton connectButton = new JButton();
+        connectButton.setText("connect");
+        panel.add(connectButton);
+
+        JButton submitButton = new JButton();
+        submitButton.setText("submit");
+        panel.add(submitButton);
+
         dialog.add(panel);
     }
 

@@ -1,22 +1,7 @@
 package by.makedon.smtpclient.command.factory;
 
 import by.makedon.smtpclient.command.Command;
-import by.makedon.smtpclient.command.impl.DataCommand;
-import by.makedon.smtpclient.command.impl.EhloCommand;
-import by.makedon.smtpclient.command.impl.ExpnCommand;
-import by.makedon.smtpclient.command.impl.HeloCommand;
-import by.makedon.smtpclient.command.impl.HelpCommand;
-import by.makedon.smtpclient.command.impl.MailCommand;
-import by.makedon.smtpclient.command.impl.NoopCommand;
-import by.makedon.smtpclient.command.impl.QuitCommand;
-import by.makedon.smtpclient.command.impl.RcptCommand;
-import by.makedon.smtpclient.command.impl.RsetCommand;
-import by.makedon.smtpclient.command.impl.SamlCommand;
-import by.makedon.smtpclient.command.impl.SendCommand;
-import by.makedon.smtpclient.command.impl.SendMessageCommand;
-import by.makedon.smtpclient.command.impl.SomlCommand;
-import by.makedon.smtpclient.command.impl.TurnCommand;
-import by.makedon.smtpclient.command.impl.VrfyCommand;
+import by.makedon.smtpclient.command.impl.*;
 
 public enum CommandType {
     EHLO(new EhloCommand()),
@@ -35,6 +20,8 @@ public enum CommandType {
     QUIT(new QuitCommand()),
     TURN(new TurnCommand()),
 
+    CONNECT(new ConnectCommand()),
+    SUBMIT(new SubmitCommand()),
     SEND_MESSAGE(new SendMessageCommand());
 
     private Command command;
