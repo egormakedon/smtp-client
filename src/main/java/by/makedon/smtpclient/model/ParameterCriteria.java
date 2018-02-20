@@ -1,5 +1,5 @@
 package by.makedon.smtpclient.model;
 
 public enum ParameterCriteria {
-    TO, SUBJECT, MAIL_TEXT, ARGUMENT
+    FROM, SMTP_SERVER,TO, SUBJECT, MAIL_TEXT, ARGUMENT
 }

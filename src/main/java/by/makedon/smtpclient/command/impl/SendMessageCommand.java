@@ -21,10 +21,6 @@ public class SendMessageCommand implements Command {
         String subjectValue = parameters.get(ParameterCriteria.SUBJECT);
         String mailTextValue = parameters.get(ParameterCriteria.MAIL_TEXT);
 
-        if (!Validator.validateMailText(mailTextValue)) {
-            throw new InvalidParameterException("Dot '.' can't be the one symbol in sentence");
-        }
-
         if (!Validator.validateToEmail(toValue)) {
             throw new InvalidParameterException("invalid to email\\emails");
         }

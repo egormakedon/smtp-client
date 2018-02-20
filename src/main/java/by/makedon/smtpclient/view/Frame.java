@@ -20,22 +20,15 @@ public class Frame {
     private static final Logger LOGGER = LogManager.getLogger(Frame.class);
 
     private JFrame frame;
-
-    private JTextField smtpServerField = new JTextField();
-    private JTextField fromField = new JTextField();
     private JTextField toField = new JTextField();
     private JTextField subjectField = new JTextField();
     private JTextArea messageArea = new JTextArea();
-
     private JTextArea memoArea = new JTextArea();
 
     public Frame() {
         frame = new JFrame();
         setFrame();
-
-        setFieldsPanel();
-        setMessagePanel();
-        setButtons();
+        setMainPart();
         setMemoPanel();
     }
 
@@ -44,46 +37,40 @@ public class Frame {
     }
 
     private void setFrame() {
-        frame.setLayout(new GridLayout(4, 1));
+        frame.setLayout(new GridLayout(2, 1));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(700,550));
-        frame.setSize(new Dimension(700, 550));
+        frame.setPreferredSize(new Dimension(550,900));
+        frame.setSize(new Dimension(550, 900));
         frame.setTitle("Thunderbird");
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
     }
 
-    private void setFieldsPanel() {
-        JPanel panel = new JPanel();
+    private void setMainPart() {
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new FlowLayout());
 
-        panel.add(new Label("SMTP server"));
-        smtpServerField.setColumns(25);
-        smtpServerField.setToolTipText("SMTP server");
-        panel.add(smtpServerField);
-
-        panel.add(new Label("from"));
-        fromField.setColumns(25);
-        fromField.setToolTipText("from");
-        panel.add(fromField);
-
-        panel.add(new Label("to"));
-        toField.setColumns(25);
+        panel1.add(new Label("to"));
+        toField.setColumns(43);
         toField.setToolTipText("to");
-        panel.add(toField);
+        panel1.add(toField);
 
-        panel.add(new Label("subject"));
-        subjectField.setColumns(25);
+        panel1.add(new Label("subject"));
+        subjectField.setColumns(43);
         subjectField.setToolTipText("subject");
-        panel.add(subjectField);
+        panel1.add(subjectField);
 
+        JScrollPane panel2 = new JScrollPane((messageArea));
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3,1));
+        panel.add(panel1);
+        panel.add(panel2);
+        setButtons(panel);
         frame.add(panel);
     }
 
-    private void setMessagePanel() {
-        frame.add(new JScrollPane((new JPanel()).add(messageArea)));
-    }
-
-    private void setButtons() {
+    private void setButtons(JPanel panel) {
         JButton sendButton = new JButton();
         sendButton.setText("send_message");
 
@@ -91,8 +78,6 @@ public class Frame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Map<ParameterCriteria, String> parameters = new HashMap<ParameterCriteria, String>();
-                parameters.put(ParameterCriteria.SMTP_SERVER, smtpServerField.getText());
-                parameters.put(ParameterCriteria.FROM, fromField.getText());
                 parameters.put(ParameterCriteria.TO, toField.getText());
                 parameters.put(ParameterCriteria.SUBJECT, subjectField.getText());
                 parameters.put(ParameterCriteria.MAIL_TEXT, messageArea.getText());
@@ -118,13 +103,13 @@ public class Frame {
             }
         });
 
-        JPanel panel = new JPanel();
+        JPanel panel1 = new JPanel();
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(0, 50, 0, 50);
-        panel.setLayout(new GridBagLayout());
-        panel.add(sendButton, c);
-        panel.add(allCommandsButton, c);
-        frame.add(panel);
+        panel1.setLayout(new GridBagLayout());
+        panel1.add(sendButton, c);
+        panel1.add(allCommandsButton, c);
+        panel.add(panel1);
     }
 
     private void setMemoPanel() {

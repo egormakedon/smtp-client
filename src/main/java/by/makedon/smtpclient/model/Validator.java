@@ -11,12 +11,4 @@ public class Validator {
     public static boolean validateToEmail(String to) {
         return Pattern.matches(TO_EMAIL_REGEXP, to);
     }
-    public static boolean validateMailText(String mailText) {
-        for (String s : mailText.split("\n")) {
-            if (s.equals(".")) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
