@@ -1,7 +1,6 @@
 package by.makedon.smtpclient.socket;
 
 import by.makedon.smtpclient.model.MemoBuffer;
-import by.makedon.smtpclient.exception.MailSocketException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

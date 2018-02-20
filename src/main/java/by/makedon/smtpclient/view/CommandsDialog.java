@@ -3,7 +3,6 @@ package by.makedon.smtpclient.view;
 import by.makedon.smtpclient.controller.Controller;
 import by.makedon.smtpclient.exception.CommandException;
 import by.makedon.smtpclient.exception.InvalidParameterException;
-import by.makedon.smtpclient.exception.MailSocketException;
 import by.makedon.smtpclient.model.MemoBuffer;
 import by.makedon.smtpclient.model.ParameterCriteria;
 import org.apache.logging.log4j.Level;

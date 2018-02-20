@@ -3,7 +3,7 @@ package by.makedon.smtpclient.command.impl;
 import by.makedon.smtpclient.command.Command;
 import by.makedon.smtpclient.exception.CommandException;
 import by.makedon.smtpclient.exception.InvalidParameterException;
-import by.makedon.smtpclient.exception.MailSocketException;
+import by.makedon.smtpclient.exception.SmtpSocketException;
 import by.makedon.smtpclient.model.ParameterCriteria;
 import by.makedon.smtpclient.socket.MailSocket;
 
@@ -20,7 +20,7 @@ public class HeloCommand implements Command {
         MailSocket mailSocket = MailSocket.getInstance();
         try {
             mailSocket.create(argumentValue);
-        } catch (MailSocketException e) {
+        } catch (SmtpSocketException e) {
             mailSocket.close();
             throw new CommandException(e);
         }

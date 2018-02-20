@@ -5,7 +5,6 @@ import by.makedon.smtpclient.command.factory.CommandFactory;
 import by.makedon.smtpclient.exception.CommandException;
 import by.makedon.smtpclient.model.ParameterCriteria;
 import by.makedon.smtpclient.exception.InvalidParameterException;
-import by.makedon.smtpclient.exception.MailSocketException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
