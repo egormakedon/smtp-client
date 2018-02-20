@@ -29,6 +29,10 @@ public class SSLGmailSocket {
     private PrintWriter output;
 
     public void create() throws SmtpSocketException {
+        if (MailSocket.getInstance().isSocketCreated()) {
+            throw new SmtpSocketException("close another connection");
+        }
+
         URL url = this.getClass().getResource(SMTP_PROPERTIES_PATH);
         if (url == null) {
             LOGGER.log(Level.FATAL, "smtp property file hasn't found");

@@ -1,5 +1,6 @@
 package by.makedon.smtpclient.socket;
 
+import by.makedon.smtpclient.exception.SmtpSocketException;
 import by.makedon.smtpclient.model.MemoBuffer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -37,12 +38,11 @@ public final class MailSocket {
             throw new RuntimeException("try to clone singleton object");
         }
     }
-
     public static MailSocket getInstance() {
         return INSTANCE;
     }
 
-    public void create(String address) throws MailSocketException {
+    public void create(String address) throws SmtpSocketException {
         if (socketCreated) {
             return;
         }
@@ -50,8 +50,8 @@ public final class MailSocket {
         try {
             InetAddress inetAddress = InetAddress.getByName(address);
 
-            if (!inetAddress.isReachable(5000)) {
-                throw new MailSocketException(address + " - invalid host");
+            if (!inetAddress.isReachable(1500)) {
+                throw new SmtpSocketException(address + " - invalid host");
             }
 
             socket = new Socket(inetAddress, PORT);
@@ -60,15 +60,15 @@ public final class MailSocket {
 
             MemoBuffer memoBuffer = MemoBuffer.getInstance();
             memoBuffer.appendClient("connected to " + address + "\n");
-            memoBuffer.appendServer(input.nextLine());
+            memoBuffer.appendServer(input);
 
             socketCreated = true;
         } catch (UnknownHostException e) {
             close();
-            throw new MailSocketException("invalid host", e);
+            throw new SmtpSocketException("invalid host", e);
         } catch (IOException e) {
             close();
-            throw new MailSocketException(e);
+            throw new SmtpSocketException(e);
         }
     }
 
@@ -77,32 +77,39 @@ public final class MailSocket {
 
         if (input != null) {
             input.close();
+            input = null;
         }
 
         if (output != null) {
             output.close();
+            output = null;
         }
 
         if (socket != null) {
             try {
                 socket.close();
             } catch (IOException e) {
-                LOGGER.log(Level.WARN, e);
+                LOGGER.log(Level.FATAL, e);
+                throw new RuntimeException(e);
             }
         }
     }
 
-    public Scanner getInput() throws MailSocketException {
-        if (!socketCreated) {
-            throw new MailSocketException("socket closed");
+    public Scanner getInput() throws SmtpSocketException {
+        if (input == null) {
+            throw new SmtpSocketException("socket closed");
         }
         return input;
     }
 
-    public PrintWriter getOutput() throws MailSocketException {
-        if (!socketCreated) {
-            throw new MailSocketException("socket closed");
+    public PrintWriter getOutput() throws SmtpSocketException {
+        if (output == null) {
+            throw new SmtpSocketException("socket closed");
         }
         return output;
+    }
+
+    boolean isSocketCreated() {
+        return socketCreated;
     }
 }
